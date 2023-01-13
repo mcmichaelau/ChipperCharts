@@ -1,0 +1,48 @@
+from sec_api import XbrlApi
+import json
+from bs4 import BeautifulSoup
+
+
+def find_index(obj, value):
+    """
+    Find the index of a value within a nested dictionary or list
+    """
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if v == value:
+                return [k]
+            elif isinstance(v, (dict, list)):
+                index = find_index(v, value)
+                if index is not None:
+                    return [k] + index
+    elif isinstance(obj, list):
+        for i, v in enumerate(obj):
+            if v == value:
+                return [i]
+            elif isinstance(v, (dict, list)):
+                index = find_index(v, value)
+                if index is not None:
+                    return [i] + index
+    return None
+
+
+xbrlApi = XbrlApi("9102690068a213c71ef9436904f503665196ba3c44f9cba89e9ae877aa65c032")
+
+# 10-K HTM File URL example
+xbrl_json = xbrlApi.xbrl_to_json(
+    htm_url="https://www.sec.gov/Archives/edgar/data/1318605/000095017022019867/tsla-20220930.htm"
+)
+
+# print(xbrl_json)
+
+my_value = '46969000000'
+
+keys = find_index(xbrl_json, my_value)
+
+print(keys)
+
+result = xbrl_json
+for key in keys:
+    result = result[key]
+
+print(result)
