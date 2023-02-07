@@ -4,16 +4,18 @@ from datetime import date
 
 today = date.today()
 
-queryApi = QueryApi(api_key="14273d69ce1d514779e576b1b0188e7c76994483c5e1bab82617dc23169c2870")
+ticker = 'aapl'
+
+queryApi = QueryApi(api_key="85931c7acac0406bf1a84465dce73d958335ca73287d46a1179fe930b39c623d")
 
 query = {
     "query": {
         "query_string": {
-            "query": "ticker:AAPL AND formType:\"10-Q\""
+            "query": "ticker:"+ticker+" AND formType:\"10-Q\""
         }
     },
     "from": "0",
-    "size": "10",
+    "size": "100",
     "sort": [
         {
             "filedAt": {
